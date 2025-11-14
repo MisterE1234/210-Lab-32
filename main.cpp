@@ -5,7 +5,7 @@
 #include <deque>
 #include "Car.h"
 
-int LEAVE_CHANCE = 55, JOIN_CHANCE = 45;
+int SPLIT_PROB = 45; bool debug = true;
 
 void displayLine(deque<Car>);
 
@@ -13,7 +13,8 @@ int main(){
     //Using a random seed:
     srand(time(0));
 
-    bool debug = true;
+    bool loop = true;
+
     int chance;
     int opNum = 1;
     deque<Car> tollLine;
@@ -26,19 +27,35 @@ int main(){
     cout << "Initial Queue:\n";
     displayLine(tollLine);
 
-    //A while loop that will only exit when the deque is empty:
-    while(!tollLine.empty() && debug){
-        //using a random numnber between 100 and 1 to get the 
+    Car tempElement;
+
+    //A while loop that will only exit when the deque is empty: It will also skip the loop if 
+    while(loop){
+        //using a random numnber between 100 and 1 to get what event plays out:
         chance = rand()%100 + 1;
-        if(chance < JOIN_CHANCE){
+
+        if(chance < SPLIT_PROB){ // if the random number is less than SPLIT_PROB (45)
             tollLine.push_back(Car());
+
             cout << "Time: " << opNum << " Operation: Car Joined: ";
+            tollLine.back().print();
+        }
+        //if the 
+        else if(chance >= SPLIT_PROB){
+            cout << "Time: " << opNum << " Operation: Car Paid: ";
+            tollLine.front().print();
+
+            tollLine.pop_front();
         }
 
         opNum++;
+        if (tollLine.empty()|| debug){
+            loop = false;
+        }
     }
 
-
+    //clearing up any residual memory.
+    tollLine.clear();
     return 0;
 }
 
