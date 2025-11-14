@@ -48,17 +48,27 @@ int main(){
             tollLine.pop_front();
         }
 
-        //Displaying the current line:
-        cout << "Queue:\n";
-        displayLine(tollLine);
-
-        opNum++;
+        
+        if (!tollLine.empty()){ //if there are cars in line:
+            //Displaying the current line:
+            cout << "Queue:\n";
+            displayLine(tollLine);
+        }
+        else{//if there are no cars in line:
+            cout << "No cars in line.\n";
+        }
+    
+        
         //if the deque or debug is true end the loop:
         if (tollLine.empty()|| debug){
             loop = false;
         }
+
+        //increasing the operating number:
+        opNum++;
     }
 
+    cout << "End of Program.\n";
     //clearing up any residual memory.
     tollLine.clear();
     return 0;
@@ -71,5 +81,7 @@ void displayLine(deque<Car> line){
     for (Car element : line){
         element.print();
     }
+
+    cout << endl;
 
 }
