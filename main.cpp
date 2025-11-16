@@ -6,7 +6,7 @@
 #include <array>
 #include "Car.h"
 
-int const PAY_PROB = 46, JOIN_PROB = PAY_PROB + 39, LANE_AMOUNT = 4, SIM_AMOUNT = 20, EMPTY_PROB = 50; bool debug = true; 
+int const PAY_PROB = 46, JOIN_PROB = PAY_PROB + 39, LANE_AMOUNT = 4, SIM_AMOUNT = 20, EMPTY_PROB = 50; bool debug = false; 
 
 void displayLine(deque<Car>);
 
@@ -52,8 +52,11 @@ int main(){
                 if(chance < EMPTY_PROB){//The first car to join the toll
                     tollLine[j].push_back(Car()); //a new car joins the queue
 
-                    cout << "Lane " << j + 1<< ": Car Joined: ";
+                    cout << "Lane " << j + 1 << ": Car Joined: ";
                     tollLine[j].back().print();
+                }
+                else{
+                    cout << "Lane " << j + 1 << " is empty.\n";
                 }
             }
             else{
@@ -72,8 +75,8 @@ int main(){
                 }
                 //If the random number is greater than or equal to JOIN_PROB(85): a car has a 15% chance to switch to a different lane.
                 else if (chance >= JOIN_PROB){
-                    while(chance == j|| chance > 3){
-                    chance = rand()%3;
+                    while(chance == j|| chance >= LANE_AMOUNT){
+                    chance = rand()%LANE_AMOUNT;
                     }
                     cout << "Lane " << j + 1 << ": Car Switched to Lane " << chance + 1 << ": ";
                     tollLine[j].back().print();
@@ -87,7 +90,7 @@ int main(){
         }
         //Displaying the tempLanes in debug:
         if(debug){
-            for(int j = 0; j< LANE_AMOUNT; j++){
+            for(int j = 0; j < LANE_AMOUNT; j++){
                 if (!tempLine[j].empty()){ //if there are cars in line:
                     //Displaying the current line:
                     cout << "Temp lane " << j + 1 << " Queue:\n";
@@ -104,6 +107,7 @@ int main(){
         for(int j = 0; j < LANE_AMOUNT; j++){
             if (!tempLine[j].empty()){ //if there are cars in line:
                 tollLine[j].push_back(tempLine[j].back());
+                tempLine[j].pop_back();
             }
             
         }
