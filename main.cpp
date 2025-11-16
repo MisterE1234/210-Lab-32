@@ -6,7 +6,7 @@
 #include <array>
 #include "Car.h"
 
-int const PAY_PROB = 46, JOIN_PROB = PAY_PROB + 39, SHIFT_PROB = JOIN_PROB + 15, LINE_AMOUNT = 4, SIM_AMOUNT = 20; bool debug = false; 
+int const PAY_PROB = 46, JOIN_PROB = PAY_PROB + 39, LINE_AMOUNT = 4, SIM_AMOUNT = 20; bool debug = false; 
 
 void displayLine(deque<Car>);
 
@@ -42,25 +42,26 @@ int main(){
             //using a random numnber between 100 and 1 to get what event plays out:
             chance = rand()%100 + 1;
 
-            if(chance < PAY_PROB){ // if the random number is less than PAY_PROB (46) so that a car has a 46% chance to pay.
-                cout << "Time: Operation " << opNum << " : Car Paid: ";
+            cout << "Time: " << i + 1 << endl;
+
+            if(chance < PAY_PROB){ // if the random number is less than PAY_PROB (46) so that the front car has a 46% chance to pay.
+                cout << "Lane" << j + 1 << ": Car Paid: ";
                 tollLine[j].front().print();
 
                 tollLine[j].pop_front();
+            
+            }
+            //if the random number is less than JOIN_PROB (85): a car has a 39% chance to join the queue.
+            else if(chance < JOIN_PROB){//The first car to join the toll
+                tollLine[j].push_back(Car()); //a new car joins the queue
+
+                cout << "Lane " << j << ": Car Joined: ";
+                tollLine[j].back().print();
+            }
+            //If the random number is greater than or equal to JOIN_PROB(85): a car has a 15% chance to switch to a different lane.
+            else if(chance >= JOIN_PROB){
                 
-                tollLine[j].push_back(Car()); //a new car joins the queue
-
-                cout << "Time: Operation " << opNum << " : Car Joined: ";
-                tollLine[j].back().print();
             }
-            //if the random number is more or equal to than SPLIT_PROB (45) sor that it has a 55% chance to happen.
-            else if(chance >= JOIN_PROB){//The first car to join the toll
-                tollLine[j].push_back(Car()); //a new car joins the queue
-
-                cout << "Time: Operation " << opNum << " : Car Joined: ";
-                tollLine[j].back().print();
-            }
-
         
             if (!tollLine.empty()){ //if there are cars in line:
                 //Displaying the current line:
@@ -74,7 +75,7 @@ int main(){
         
             //if the deque or debug is true end the loop:
             if (tollLine[j].empty()|| debug){
-                loop = false;
+                exit;
             }
         }
 
