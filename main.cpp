@@ -67,7 +67,6 @@ int main(){
             
         }
 
-
         //Displaying the current queues:
         for(int j = 0; j < LANE_AMOUNT; j++){
             if (!tollLine[j].empty()){ //if there are cars in line:
@@ -76,7 +75,7 @@ int main(){
                 displayLine(tollLine[j]);
             }
             else{//if there are no cars in line:
-                cout << "No cars in lane.\n";
+                cout << "No cars in lane " << j + 1 << ".\n";
                 break;
             }
         }
