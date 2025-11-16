@@ -55,7 +55,7 @@ int main(){
                     cout << "Lane " << j + 1 << ": Car Joined: ";
                     tollLine[j].back().print();
                 }
-                else{
+                else{//if nothing is done with the lane
                     cout << "Lane " << j + 1 << " is empty.\n";
                 }
             }
@@ -75,9 +75,11 @@ int main(){
                 }
                 //If the random number is greater than or equal to JOIN_PROB(85): a car has a 15% chance to switch to a different lane.
                 else if (chance >= JOIN_PROB){
+                    //A while loop to get Lane number different than the current:
                     while(chance == j|| chance >= LANE_AMOUNT){
                     chance = rand()%LANE_AMOUNT;
                     }
+                    //switching car and Lane
                     cout << "Lane " << j + 1 << ": Car Switched to Lane " << chance + 1 << ": ";
                     tollLine[j].back().print();
 
@@ -123,6 +125,7 @@ int main(){
                 
             }
         }
+        cout << endl;
         
 
     }
@@ -142,6 +145,7 @@ int main(){
 //returns: none
 void displayLine(deque<Car> line){
     for (Car element : line){
+        cout << "       ";
         element.print();
     }
 
