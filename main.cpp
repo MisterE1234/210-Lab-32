@@ -67,15 +67,37 @@ int main(){
                 else if(chance < JOIN_PROB){
                     tollLine[j].push_back(Car()); //a new car joins the queue
 
-                    cout << "Lane " << j + 1<< ": Car Joined: ";
+                    cout << "Lane " << j + 1 << ": Car Joined: ";
                     tollLine[j].back().print();
                 }
                 //If the random number is greater than or equal to JOIN_PROB(85): a car has a 15% chance to switch to a different lane.
                 else if (chance >= JOIN_PROB){
-                
+                    while(chance != j){
+                    chance = rand()%3;
+                    }
+                    cout << "Lane " << j + 1 << ": Car Switched to Lane " << chance << ": ";
+                    tollLine[j].back().print();
+
+                    tempLine[chance].push_back(tollLine[j].back());
+                    tollLine[j].pop_back();
+                    
                 }
             }
             
+        }
+
+        if(debug){
+            for(int j = 0; j< LANE_AMOUNT; j++){
+                if (!tempLine[j].empty()){ //if there are cars in line:
+                //Displaying the current line:
+                cout << "Temp lane " << j + 1 << " Queue:\n";
+                displayLine(tempLine[j]);
+            }
+            else{//if there are no cars in line:
+                cout << "No cars in temp lane " << j + 1 << ".\n";
+                break;
+            }
+            }
         }
 
         //Displaying the current queues:
@@ -98,7 +120,9 @@ int main(){
     //clearing up any residual memory.
     for(int i = 0; i < LANE_AMOUNT; i++){
         tollLine[i].clear();
+        tempLine[i].clear();
     }
+    
     return 0;
 }
 
