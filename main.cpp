@@ -6,7 +6,7 @@
 #include <array>
 #include "Car.h"
 
-int const PAY_PROB = 50, JOIN_PROB = PAY_PROB + 39, LINE_AMOUNT = 4, SIM_AMOUNT = 20; bool debug = false; 
+int const PAY_PROB = 50, JOIN_PROB = PAY_PROB + 39, LANE_AMOUNT = 4, SIM_AMOUNT = 20; bool debug = false; 
 
 void displayLine(deque<Car>);
 
@@ -18,13 +18,13 @@ int main(){
     bool loop = true;
 
     int chance; // a number that will contain a random number between 1 and 100.
-    int opNum = 1; // the number that is the current operation
+    
 
-    array <deque <Car>, LINE_AMOUNT> tollLine ;
+    array <deque <Car>, LANE_AMOUNT> tollLine ;
 
     //Initializing the line:
     //using a for loop to fill each line with 2 cars each:
-    for(int i = 0; i < LINE_AMOUNT;i++){
+    for(int i = 0; i < LANE_AMOUNT;i++){
     tollLine[i].push_back(Car());
     tollLine[i].push_back(Car());
 
@@ -40,11 +40,15 @@ int main(){
 
         cout << "Time: " << i + 1 << endl;
 
-        for(int j = 0; j < SIM_AMOUNT; j++){
+        for(int j = 0; j < LANE_AMOUNT; j++){
             //using a random numnber between 100 and 1 to get what event plays out:
             chance = rand()%100 + 1;
 
             if(chance < PAY_PROB){ // if the random number is less than PAY_PROB (46) so that the front car has a 46% chance to pay.
+                if(tollLine[j].empty()){
+                    cout << "No cars in lane\n";
+                    break;
+                }
                 cout << "Lane " << j + 1 << ": Car Paid: ";
                 tollLine[j].front().print();
 
@@ -60,30 +64,29 @@ int main(){
             }
             //If the random number is greater than or equal to JOIN_PROB(85): a car has a 15% chance to switch to a different lane.
            
-        
-            if (!tollLine.empty()){ //if there are cars in line:
-                //Displaying the current line:
-                cout << "Queue:\n";
-                displayLine(tollLine[j]);
-            }
-            else{//if there are no cars in line:
-                cout << "No cars in line.\n";
-                break;
-            }
-    
-        
-            //if the deque or debug is true end the loop:
             
         }
 
-        //increasing the operating number:
-        opNum++;
+
+        //Displaying the current queues:
+        for(int j = 0; j < LANE_AMOUNT; j++){
+            if (!tollLine[j].empty()){ //if there are cars in line:
+                //Displaying the current line:
+                cout << "Lane " << j + 1 << " Queue:\n";
+                displayLine(tollLine[j]);
+            }
+            else{//if there are no cars in line:
+                cout << "No cars in lane.\n";
+                break;
+            }
+        }
+        
 
     }
 
     cout << "End of Program.\n";
     //clearing up any residual memory.
-    for(int i = 0; i < LINE_AMOUNT; i++){
+    for(int i = 0; i < LANE_AMOUNT; i++){
         tollLine[i].clear();
     }
     return 0;
