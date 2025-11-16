@@ -3,9 +3,10 @@
 
 #include <iostream>
 #include <deque>
+#include <array>
 #include "Car.h"
 
-int SPLIT_PROB = 45; bool debug = false;
+int const SPLIT_PROB = 45, LINE_AMOUNT = 4, SIM_AMOUNT = 20; bool debug = false; 
 
 void displayLine(deque<Car>);
 
@@ -18,19 +19,24 @@ int main(){
 
     int chance; // a number that will contain a random number between 1 and 100.
     int opNum = 1; // the number that is the current operation
-    deque<Car> tollLine;
+
+    array <deque <Car>, LINE_AMOUNT> tollLine ;
 
     //Initializing the line:
-    tollLine.push_back(Car());
-    tollLine.push_back(Car());
+    //using a for loop to fill each line with 2 cars each:
+    for(int i = 0; i < LINE_AMOUNT;i++){
+    tollLine[i].push_back(Car());
+    tollLine[i].push_back(Car());
 
     //Displaying the initial line:
     cout << "Initial Queue:\n";
-    displayLine(tollLine);
+    displayLine(tollLine[i]);
+
+    }
 
 
     //A while loop that will only exit when the deque is empty: It will also skip the loop if 
-    while(loop){
+    for(int i = 0; i < SIM_AMOUNT; i++){
         //using a random numnber between 100 and 1 to get what event plays out:
         chance = rand()%100 + 1;
 
