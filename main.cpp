@@ -6,7 +6,7 @@
 #include <array>
 #include "Car.h"
 
-int const PAY_PROB = 46, JOIN_PROB = PAY_PROB + 39, LANE_AMOUNT = 4, SIM_AMOUNT = 20, EMPTY_PROB = 50; bool debug = false; 
+int const PAY_PROB = 46, JOIN_PROB = PAY_PROB + 39, LANE_AMOUNT = 4, SIM_AMOUNT = 20, EMPTY_PROB = 50; bool debug = true; 
 
 void displayLine(deque<Car>);
 
@@ -72,10 +72,10 @@ int main(){
                 }
                 //If the random number is greater than or equal to JOIN_PROB(85): a car has a 15% chance to switch to a different lane.
                 else if (chance >= JOIN_PROB){
-                    while(chance != j){
+                    while(chance == j|| chance > 3){
                     chance = rand()%3;
                     }
-                    cout << "Lane " << j + 1 << ": Car Switched to Lane " << chance << ": ";
+                    cout << "Lane " << j + 1 << ": Car Switched to Lane " << chance + 1 << ": ";
                     tollLine[j].back().print();
 
                     tempLine[chance].push_back(tollLine[j].back());
@@ -85,21 +85,28 @@ int main(){
             }
             
         }
-
+        //Displaying the tempLanes in debug:
         if(debug){
             for(int j = 0; j< LANE_AMOUNT; j++){
                 if (!tempLine[j].empty()){ //if there are cars in line:
-                //Displaying the current line:
-                cout << "Temp lane " << j + 1 << " Queue:\n";
-                displayLine(tempLine[j]);
-            }
-            else{//if there are no cars in line:
-                cout << "No cars in temp lane " << j + 1 << ".\n";
-                break;
-            }
+                    //Displaying the current line:
+                    cout << "Temp lane " << j + 1 << " Queue:\n";
+                    displayLine(tempLine[j]);
+                }
+                else{//if there are no cars in line:
+                    cout << "No cars in temp lane " << j + 1 << ".\n";
+                    
+                }
             }
         }
 
+        //Filling the lanes with their switched cars:
+        for(int j = 0; j < LANE_AMOUNT; j++){
+            if (!tempLine[j].empty()){ //if there are cars in line:
+                tollLine[j].push_back(tempLine[j].back());
+            }
+            
+        }
         //Displaying the current queues:
         for(int j = 0; j < LANE_AMOUNT; j++){
             if (!tollLine[j].empty()){ //if there are cars in line:
@@ -109,7 +116,7 @@ int main(){
             }
             else{//if there are no cars in line:
                 cout << "No cars in lane " << j + 1 << ".\n";
-                break;
+                
             }
         }
         
